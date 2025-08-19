@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://themadoxx.github.io/internship-startup",
+  "homepage": "https://themadoxx.github.io/internship",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist -b gh-pages"
   },
   "dependencies": {
+    "lucide-react": "^0.540.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1"
