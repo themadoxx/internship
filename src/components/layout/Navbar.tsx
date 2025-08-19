@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
 // Types
@@ -10,20 +10,34 @@ interface NavigationItem {
 interface LinkProps {
   to: string;
   children: React.ReactNode;
-  className?: string;
+  style?: React.CSSProperties;
   onClick?: () => void;
+  onMouseEnter?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  onMouseLeave?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
 // Composant Link simulé pour la démo (remplacez par votre router)
-const Link: React.FC<LinkProps> = ({ to, children, className, onClick }) => (
+const Link: React.FC<LinkProps> = ({
+  to,
+  children,
+  style,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+}) => (
   <a
     href={to}
-    className={className}
+    style={{
+      textDecoration: "none",
+      cursor: "pointer",
+      ...style,
+    }}
     onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault();
       if (onClick) onClick();
-      // Ici vous pouvez ajouter votre logique de navigation
     }}
+    onMouseEnter={onMouseEnter}
+    onMouseLeave={onMouseLeave}
   >
     {children}
   </a>
@@ -31,7 +45,20 @@ const Link: React.FC<LinkProps> = ({ to, children, className, onClick }) => (
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [currentPath, setCurrentPath] = useState<string>("/"); // Simule useLocation
+  const [currentPath, setCurrentPath] = useState<string>("/");
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+
+  // Hook pour détecter la taille d'écran
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   const navigationItems: NavigationItem[] = [
     { to: "/", label: "Home" },
@@ -56,115 +83,329 @@ const Navbar: React.FC = () => {
 
   const handleGetStarted = (): void => {
     console.log("Get Started clicked");
-    // Ajoutez votre logique ici
+  };
+
+  // Styles
+  const navbarStyle: React.CSSProperties = {
+    backgroundColor: "#ffffff",
+    boxShadow:
+      "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+    borderBottom: "1px solid #e5e7eb",
+    position: "sticky",
+    top: 0,
+    zIndex: 50,
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  };
+
+  const containerStyle: React.CSSProperties = {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "0 1rem",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "64px",
+  };
+
+  const brandStyle: React.CSSProperties = {
+    fontSize: "1.5rem",
+    fontWeight: 700,
+    background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+    WebkitBackgroundClip: "text",
+    backgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    transition: "all 0.3s ease",
+  };
+
+  const desktopNavStyle: React.CSSProperties = {
+    display: isDesktop ? "flex" : "none",
+    alignItems: "baseline",
+    gap: "0.25rem",
+    listStyle: "none",
+    margin: 0,
+    padding: 0,
+  };
+
+  const navLinkBaseStyle: React.CSSProperties = {
+    padding: "0.5rem 1rem",
+    borderRadius: "0.5rem",
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    transition: "all 0.3s ease",
+    position: "relative",
+    display: "inline-block",
+  };
+
+  const getNavLinkStyle = (isActive: boolean): React.CSSProperties => ({
+    ...navLinkBaseStyle,
+    color: isActive ? "#3b82f6" : "#374151",
+    backgroundColor: isActive ? "#eff6ff" : "transparent",
+    boxShadow: isActive ? "0 1px 2px 0 rgba(0, 0, 0, 0.05)" : "none",
+  });
+
+  const ctaButtonStyle: React.CSSProperties = {
+    display: isDesktop ? "block" : "none",
+    background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+    color: "white",
+    border: "none",
+    padding: "0.5rem 1.5rem",
+    borderRadius: "0.5rem",
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+    fontSize: "0.875rem",
+  };
+
+  const mobileMenuButtonStyle: React.CSSProperties = {
+    display: isDesktop ? "none" : "block",
+    background: "none",
+    border: "none",
+    padding: "0.5rem",
+    borderRadius: "0.5rem",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    color: "#6b7280",
+  };
+
+  const mobileNavStyle: React.CSSProperties = {
+    display: isDesktop ? "none" : "block",
+    maxHeight: isMenuOpen ? "400px" : "0",
+    opacity: isMenuOpen ? 1 : 0,
+    overflow: "hidden",
+    transition: "all 0.3s ease",
+    backgroundColor: "#ffffff",
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+    borderTop: "1px solid #e5e7eb",
+  };
+
+  const mobileNavContentStyle: React.CSSProperties = {
+    padding: "0.5rem 1rem 1rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+  };
+
+  const mobileNavLinkStyle = (isActive: boolean): React.CSSProperties => ({
+    padding: "0.75rem 1rem",
+    borderRadius: "0.5rem",
+    fontSize: "1rem",
+    fontWeight: 500,
+    transition: "all 0.3s ease",
+    color: isActive ? "#3b82f6" : "#374151",
+    backgroundColor: isActive ? "#eff6ff" : "transparent",
+    borderLeft: `4px solid ${isActive ? "#3b82f6" : "transparent"}`,
+  });
+
+  const mobileCTAContainerStyle: React.CSSProperties = {
+    paddingTop: "1rem",
+    marginTop: "1rem",
+    borderTop: "1px solid #e5e7eb",
+  };
+
+  const mobileCTAStyle: React.CSSProperties = {
+    width: "100%",
+    background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+    color: "white",
+    border: "none",
+    padding: "0.75rem 1.5rem",
+    borderRadius: "0.5rem",
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+    fontSize: "0.875rem",
   };
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <>
+      <nav style={navbarStyle}>
+        <div style={containerStyle}>
           {/* Logo / Brand */}
-          <div className="flex-shrink-0 flex items-center">
+          <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
             <Link
               to="/"
               onClick={() => handleNavigation("/")}
-              className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+              style={brandStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background =
+                  "linear-gradient(135deg, #2563eb, #7c3aed)";
+                e.currentTarget.style.transform = "scale(1.05)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background =
+                  "linear-gradient(135deg, #3b82f6, #8b5cf6)";
+                e.currentTarget.style.transform = "scale(1)";
+              }}
             >
               Enterprise
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-1">
+          <div>
+            <ul style={desktopNavStyle}>
               {navigationItems.map((item: NavigationItem) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  onClick={() => handleNavigation(item.to)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative group ${
-                    isActiveLink(item.to)
-                      ? "text-blue-600 bg-blue-50 shadow-sm"
-                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                  }`}
-                >
-                  {item.label}
-                  <span
-                    className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full ${
-                      isActiveLink(item.to) ? "w-full" : ""
-                    }`}
-                  />
-                </Link>
+                <li key={item.to} style={{ position: "relative" }}>
+                  <Link
+                    to={item.to}
+                    onClick={() => handleNavigation(item.to)}
+                    style={getNavLinkStyle(isActiveLink(item.to))}
+                    onMouseEnter={(e) => {
+                      if (!isActiveLink(item.to)) {
+                        e.currentTarget.style.color = "#3b82f6";
+                        e.currentTarget.style.backgroundColor = "#f9fafb";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActiveLink(item.to)) {
+                        e.currentTarget.style.color = "#374151";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                      }
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           {/* CTA Button Desktop */}
-          <div className="hidden md:block">
+          <div>
             <button
               onClick={handleGetStarted}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              style={ctaButtonStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background =
+                  "linear-gradient(135deg, #2563eb, #7c3aed)";
+                e.currentTarget.style.transform =
+                  "translateY(-1px) scale(1.05)";
+                e.currentTarget.style.boxShadow =
+                  "0 10px 15px -3px rgba(0, 0, 0, 0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background =
+                  "linear-gradient(135deg, #3b82f6, #8b5cf6)";
+                e.currentTarget.style.transform = "translateY(0) scale(1)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
+              }}
             >
               Get Started
             </button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div>
             <button
               onClick={toggleMobileMenu}
-              className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300"
+              style={mobileMenuButtonStyle}
               aria-expanded={isMenuOpen}
               aria-label="Toggle navigation menu"
               type="button"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#111827";
+                e.currentTarget.style.backgroundColor = "#f3f4f6";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#6b7280";
+                e.currentTarget.style.backgroundColor = "transparent";
+              }}
             >
               {isMenuOpen ? (
-                <X className="h-6 w-6" />
+                <X style={{ height: "24px", width: "24px" }} />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu style={{ height: "24px", width: "24px" }} />
               )}
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Navigation Menu */}
-      <div
-        className={`md:hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen
-            ? "max-h-96 opacity-100"
-            : "max-h-0 opacity-0 overflow-hidden"
-        }`}
-      >
-        <div className="px-4 pt-2 pb-4 space-y-2 bg-white shadow-lg border-t border-gray-100">
-          {navigationItems.map((item: NavigationItem) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={() => handleNavigation(item.to)}
-              className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 ${
-                isActiveLink(item.to)
-                  ? "text-blue-600 bg-blue-50 border-l-4 border-blue-600"
-                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-l-4 border-transparent hover:border-blue-200"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+        {/* Mobile Navigation Menu */}
+        <div style={mobileNavStyle}>
+          <div style={mobileNavContentStyle}>
+            {navigationItems.map((item: NavigationItem) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => handleNavigation(item.to)}
+                style={mobileNavLinkStyle(isActiveLink(item.to))}
+                onMouseEnter={(e) => {
+                  if (!isActiveLink(item.to)) {
+                    e.currentTarget.style.backgroundColor = "#f9fafb";
+                    e.currentTarget.style.borderLeftColor = "#93c5fd";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActiveLink(item.to)) {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.borderLeftColor = "transparent";
+                  }
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
 
-          {/* Mobile CTA Button */}
-          <div className="pt-4 border-t border-gray-100 mt-4">
-            <button
-              onClick={handleGetStarted}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg"
-              type="button"
-            >
-              Get Started
-            </button>
+            {/* Mobile CTA Button */}
+            <div style={mobileCTAContainerStyle}>
+              <button
+                onClick={handleGetStarted}
+                style={mobileCTAStyle}
+                type="button"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background =
+                    "linear-gradient(135deg, #2563eb, #7c3aed)";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background =
+                    "linear-gradient(135deg, #3b82f6, #8b5cf6)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                Get Started
+              </button>
+            </div>
           </div>
         </div>
+      </nav>
+
+      {/* Demo content pour tester le sticky */}
+      <div
+        style={{
+          padding: "2rem",
+          backgroundColor: "#f8fafc",
+          minHeight: "100vh",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+            backgroundColor: "white",
+            padding: "2rem",
+            borderRadius: "0.5rem",
+            boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <h1 style={{ color: "#1f2937", marginBottom: "1rem" }}>
+            Navbar Professionnelle
+          </h1>
+          <p style={{ color: "#6b7280", lineHeight: 1.6 }}>
+            Cette navbar responsive utilise React TypeScript avec CSS-in-JS.
+            Elle s'adapte automatiquement à la taille d'écran et offre une
+            expérience utilisateur premium.
+          </p>
+          <p style={{ color: "#6b7280", lineHeight: 1.6, marginTop: "1rem" }}>
+            Testez la navigation en cliquant sur les liens et le menu mobile sur
+            petit écran !
+          </p>
+        </div>
       </div>
-    </nav>
+    </>
   );
 };
 
