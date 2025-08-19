@@ -1,0 +1,4 @@
+{
+  "mixpanel": { "label": "Mixpanel dashboard (redacted)", "url": "https://mixpanel.com/..." },
+  "abtest":   { "label": "A/B test report (internal, redacted)", "url": "https://..." }
+}

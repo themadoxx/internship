@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "context": "CAC too high for FR market segment.",
+      "actions": ["Rebuilt audiences", "Launched A/B tests on landing copy", "Weekly KPI dashboard implemented"],
+      "result": "CAC -28% in 6 weeks; LTV/CAC +0.6",
+      "kpis": ["CAC", "CVR", "LTV/CAC"]
+    }
+  ],
+  "proofs": [
+    { "type": "image", "src": "/assets/proofs/cac_trend.png", "caption": "CAC trend (May–June, dated screenshot)." }
+  ],
+  "sources": ["mixpanel", "abtest"]
+}

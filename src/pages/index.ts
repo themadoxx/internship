@@ -1,0 +1,5 @@
+export { default as Home } from './Home'
+export { default as Company } from './Company'
+export { default as Experience } from './Experience'
+export { default as CriticalThinking } from './CriticalThinking'
+export { default as OnThisSubject } from './OnThisSubject'
