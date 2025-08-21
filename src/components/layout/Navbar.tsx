@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-
+import { NavLink } from "react-router-dom";
 // Types
 interface NavigationItem {
   to: string;
@@ -224,7 +224,7 @@ const Navbar: React.FC = () => {
         <div style={containerStyle}>
           {/* Logo / Brand */}
           <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
-            <Link
+            <NavLink
               to="/"
               onClick={() => handleNavigation("/")}
               style={brandStyle}
@@ -240,7 +240,7 @@ const Navbar: React.FC = () => {
               }}
             >
               Enterprise
-            </Link>
+            </NavLink>
           </div>
 
           {/* Desktop Navigation */}
@@ -248,7 +248,7 @@ const Navbar: React.FC = () => {
             <ul style={desktopNavStyle}>
               {navigationItems.map((item: NavigationItem) => (
                 <li key={item.to} style={{ position: "relative" }}>
-                  <Link
+                  <NavLink
                     to={item.to}
                     onClick={() => handleNavigation(item.to)}
                     style={getNavLinkStyle(isActiveLink(item.to))}
@@ -266,7 +266,7 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     {item.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -327,7 +327,7 @@ const Navbar: React.FC = () => {
         <div style={mobileNavStyle}>
           <div style={mobileNavContentStyle}>
             {navigationItems.map((item: NavigationItem) => (
-              <Link
+              <NavLink
                 key={item.to}
                 to={item.to}
                 onClick={() => handleNavigation(item.to)}
@@ -346,7 +346,7 @@ const Navbar: React.FC = () => {
                 }}
               >
                 {item.label}
-              </Link>
+              </NavLink>
             ))}
 
             {/* Mobile CTA Button */}
@@ -373,38 +373,6 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Demo content pour tester le sticky */}
-      <div
-        style={{
-          padding: "2rem",
-          backgroundColor: "#f8fafc",
-          minHeight: "100vh",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            backgroundColor: "white",
-            padding: "2rem",
-            borderRadius: "0.5rem",
-            boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <h1 style={{ color: "#1f2937", marginBottom: "1rem" }}>
-            Navbar Professionnelle
-          </h1>
-          <p style={{ color: "#6b7280", lineHeight: 1.6 }}>
-            Cette navbar responsive utilise React TypeScript avec CSS-in-JS.
-            Elle s'adapte automatiquement à la taille d'écran et offre une
-            expérience utilisateur premium.
-          </p>
-          <p style={{ color: "#6b7280", lineHeight: 1.6, marginTop: "1rem" }}>
-            Testez la navigation en cliquant sur les liens et le menu mobile sur
-            petit écran !
-          </p>
-        </div>
-      </div>
     </>
   );
 };
