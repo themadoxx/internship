@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Clock,
-  Globe,
   Laptop,
   Briefcase,
   User,
@@ -16,8 +15,20 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+interface SectionProps {
+  title?: string;
+  subtitle?: string;
+  children: React.ReactNode;
+  className?: string;
+}
+
 // Simulated Section component
-const Section = ({ title, subtitle, children, className = "" }) => (
+const Section: React.FC<SectionProps> = ({
+  title,
+  subtitle,
+  children,
+  className = "",
+}) => (
   <section className={`section ${className}`}>
     {title && (
       <div className="section-header">
@@ -29,13 +40,23 @@ const Section = ({ title, subtitle, children, className = "" }) => (
   </section>
 );
 
+interface AnimatedCounterProps {
+  end: number;
+  duration?: number;
+  suffix?: string;
+}
+
 // Animated counter component
-const AnimatedCounter = ({ end, duration = 2000, suffix = "" }) => {
+const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
+  end,
+  duration = 2000,
+  suffix = "",
+}) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    let startTime;
-    const animate = (timestamp) => {
+    let startTime: number | undefined;
+    const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       setCount(Math.floor(progress * end));
@@ -55,7 +76,7 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = "" }) => {
 };
 
 // Floating particles component
-const FloatingParticles = () => {
+const FloatingParticles: React.FC = () => {
   const particles = Array.from({ length: 20 }, (_, i) => ({
     id: i,
     size: Math.random() * 4 + 2,
@@ -85,9 +106,18 @@ const FloatingParticles = () => {
   );
 };
 
+interface GlowCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+  className?: string;
+}
+
 // Glowing card component
-const GlowCard = ({ children, className = "" }) => (
-  <div className={`glow-card ${className}`}>
+const GlowCard: React.FC<GlowCardProps> = ({
+  children,
+  className = "",
+  ...props
+}) => (
+  <div className={`glow-card ${className}`} {...props}>
     <div className="glow-effect"></div>
     <div className="card-content">{children}</div>
   </div>
@@ -95,7 +125,7 @@ const GlowCard = ({ children, className = "" }) => (
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
-  const [hoveredCard, setHoveredCard] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   useEffect(() => {
     setIsVisible(true);
@@ -139,7 +169,6 @@ export default function Home() {
   return (
     <div className={`main-container ${isVisible ? "visible" : ""}`}>
       <div className="content-wrapper">
-        {/* Hero Section */}
         {/* Hero Section */}
         <Section className="hero-section">
           <div className="hero-gradient">
@@ -412,46 +441,24 @@ export default function Home() {
         }
 
         .hero-section {
-          transition: all 1s ease-out;
-          margin-top: -4rem;
-      
-        }
-
-        .hero-container {
           position: relative;
-
-          margin: 0 auto;
-          align-items: center;
-
-          align-content: center;
-
-          justify-content: center;
+          width: 100%;
+          min-height: 100vh;
+          transition: all 1s ease-out;
         }
 
-        .hero-card {
+        .hero-gradient {
+          position: relative;
+          width: 100%;
+          min-height: 100vh;
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #4338ca 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
           overflow: hidden;
-          align-items: center;
-          align-self: center;
-          align-content: center;
-
-          justify-content: center;
+          border-radius: 0 0 5rem 5rem;
         }
-
-
-.hero-gradient {
-position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100vh;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #4338ca 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  border-radius: 0 0 5rem 5rem;
-}
         .floating-particles {
           position: absolute;
           top: 0;
