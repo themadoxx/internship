@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Building2, GraduationCap } from "lucide-react";
 import { NavLink } from "react-router-dom";
+
 // Types
 interface NavigationItem {
   to: string;
@@ -82,7 +83,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleGetStarted = (): void => {
-    console.log("Get Started clicked");
+    console.log("View Report clicked");
   };
 
   // Styles
@@ -108,14 +109,47 @@ const Navbar: React.FC = () => {
     height: "64px",
   };
 
-  const brandStyle: React.CSSProperties = {
-    fontSize: "1.5rem",
-    fontWeight: 700,
+  const brandContainerStyle: React.CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.75rem",
+    flexShrink: 0,
+  };
+
+  const logoStyle: React.CSSProperties = {
+    padding: "0.5rem",
     background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+    borderRadius: "0.75rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+  };
+
+  const brandTextContainerStyle: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  };
+
+  const mainTitleStyle: React.CSSProperties = {
+    fontSize: isDesktop ? "1.25rem" : "1.1rem",
+    fontWeight: 700,
+    background: "linear-gradient(135deg, #1e40af, #7c3aed)",
     WebkitBackgroundClip: "text",
     backgroundClip: "text",
     WebkitTextFillColor: "transparent",
     transition: "all 0.3s ease",
+    lineHeight: "1.2",
+    margin: 0,
+  };
+
+  const subtitleStyle: React.CSSProperties = {
+    fontSize: "0.75rem",
+    color: "#6b7280",
+    fontWeight: 500,
+    marginTop: "0.125rem",
+    letterSpacing: "0.025em",
   };
 
   const desktopNavStyle: React.CSSProperties = {
@@ -145,7 +179,9 @@ const Navbar: React.FC = () => {
   });
 
   const ctaButtonStyle: React.CSSProperties = {
-    display: isDesktop ? "block" : "none",
+    display: isDesktop ? "flex" : "none",
+    alignItems: "center",
+    gap: "0.5rem",
     background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
     color: "white",
     border: "none",
@@ -216,30 +252,60 @@ const Navbar: React.FC = () => {
     transition: "all 0.3s ease",
     boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
     fontSize: "0.875rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "0.5rem",
   };
 
   return (
     <>
       <nav style={navbarStyle}>
         <div style={containerStyle}>
-          {/* Logo / Brand */}
-          <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
+          {/* Logo / Brand avec titre professionnel */}
+          <div style={brandContainerStyle}>
+            <div style={logoStyle}>
+              <Building2
+                style={{
+                  height: "20px",
+                  width: "20px",
+                  color: "white",
+                }}
+              />
+            </div>
             <NavLink
               to="/"
               onClick={() => handleNavigation("/")}
-              style={brandStyle}
+              style={{ textDecoration: "none" }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background =
-                  "linear-gradient(135deg, #2563eb, #7c3aed)";
-                e.currentTarget.style.transform = "scale(1.05)";
+                const titleElement = e.currentTarget.querySelector(
+                  "[data-title]"
+                ) as HTMLElement;
+                if (titleElement) {
+                  titleElement.style.background =
+                    "linear-gradient(135deg, #1e3a8a, #6b21a8)";
+                  titleElement.style.transform = "scale(1.02)";
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background =
-                  "linear-gradient(135deg, #3b82f6, #8b5cf6)";
-                e.currentTarget.style.transform = "scale(1)";
+                const titleElement = e.currentTarget.querySelector(
+                  "[data-title]"
+                ) as HTMLElement;
+                if (titleElement) {
+                  titleElement.style.background =
+                    "linear-gradient(135deg, #1e40af, #7c3aed)";
+                  titleElement.style.transform = "scale(1)";
+                }
               }}
             >
-              Startup Internship Website
+              <div style={brandTextContainerStyle}>
+                <h1 data-title style={mainTitleStyle}>
+                  Internship Experience Report
+                </h1>
+                <span style={subtitleStyle}>
+                  OuiChef • NEOMA Business School
+                </span>
+              </div>
             </NavLink>
           </div>
 
@@ -293,6 +359,7 @@ const Navbar: React.FC = () => {
                   "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
               }}
             >
+              <GraduationCap style={{ height: "16px", width: "16px" }} />
               Get Started
             </button>
           </div>
@@ -366,13 +433,13 @@ const Navbar: React.FC = () => {
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
+                <GraduationCap style={{ height: "16px", width: "16px" }} />
                 Get Started
               </button>
             </div>
           </div>
         </div>
       </nav>
-
     </>
   );
 };

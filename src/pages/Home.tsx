@@ -208,7 +208,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section - Full width, full height */}
-      <section className="relative w-full min-h-screen flex items-center justify-center text-center overflow-hidden">
+      <section className="relative w-full h-130 flex items-center justify-center text-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-700 rounded-b-[5rem]">
           <FloatingParticles />
         </div>
@@ -246,7 +246,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl px-4 py-2 rounded-full text-sm">
                 <User className="w-4 h-4" />
-                <span>Mr. Kamal Bencharki</span>
+                <span>Supervisor : Mr. Kamal Bencharki</span>
               </div>
               <div className="hidden sm:block text-white/60">•</div>
               <div className="bg-white/10 backdrop-blur-xl px-4 py-2 rounded-full text-sm">
