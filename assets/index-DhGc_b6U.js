@@ -264,6 +264,7 @@ Error generating stack: `+i.message+`
         .content-wrapper {
           position: relative;
           z-index: 10;
+    
       
           display: flex;
           flex-direction: column;
@@ -331,17 +332,17 @@ Error generating stack: `+i.message+`
 
 
 .hero-gradient {
-  width: 100vw;
-  height: 97vh;
+position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100vh;
   background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #4338ca 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  position: relative;
   overflow: hidden;
-  margin-left: 50%;
-  transform: translateX(-50%);
   border-radius: 0 0 5rem 5rem;
 }
         .floating-particles {
