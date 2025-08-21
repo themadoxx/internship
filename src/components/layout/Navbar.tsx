@@ -101,7 +101,7 @@ const Navbar: React.FC = () => {
   const containerStyle: React.CSSProperties = {
     maxWidth: "1200px",
     margin: "0 auto",
-    padding: "0 1rem",
+    padding: "0 2rem",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -239,7 +239,7 @@ const Navbar: React.FC = () => {
                 e.currentTarget.style.transform = "scale(1)";
               }}
             >
-              Enterprise
+              Startup Internship Website
             </NavLink>
           </div>
 

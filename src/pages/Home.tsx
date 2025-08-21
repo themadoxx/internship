@@ -412,6 +412,8 @@ export default function Home() {
 
         .hero-section {
           transition: all 1s ease-out;
+          margin-top: -4rem;
+      
         }
 
         .hero-container {
@@ -434,20 +436,10 @@ export default function Home() {
           justify-content: center;
         }
 
-      .hero-container {
-  position: relative;
-  width: 100%;    
-  margin: 0;       
-}
-
-.hero-card {
-  width: 100%;   
-  border-radius: 0;  
-}
 
 .hero-gradient {
-  width: 100vw;       
-  height: 100vh;      
+  width: 100vw;
+  height: 97vh;
   background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #4338ca 100%);
   display: flex;
   align-items: center;
@@ -455,8 +447,10 @@ export default function Home() {
   text-align: center;
   position: relative;
   overflow: hidden;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0 0 5rem 5rem;
 }
-
         .floating-particles {
           position: absolute;
           top: 0;
