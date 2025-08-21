@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root { --max: 960px; font-family: system-ui, Arial, sans-serif; line-height: 1.5; }
 body { margin: 0; }
 nav { border-bottom: 1px solid #ddd; }

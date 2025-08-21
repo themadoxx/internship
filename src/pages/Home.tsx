@@ -22,18 +22,21 @@ interface SectionProps {
   className?: string;
 }
 
-// Simulated Section component
 const Section: React.FC<SectionProps> = ({
   title,
   subtitle,
   children,
   className = "",
 }) => (
-  <section className={`section ${className}`}>
+  <section className={`flex flex-col gap-6 ${className}`}>
     {title && (
-      <div className="section-header">
-        <h2 className="section-title">{title}</h2>
-        {subtitle && <p className="section-subtitle">{subtitle}</p>}
+      <div className="text-center mb-8">
+        <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 bg-clip-text text-transparent mb-2">
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">{subtitle}</p>
+        )}
       </div>
     )}
     {children}
@@ -46,7 +49,6 @@ interface AnimatedCounterProps {
   suffix?: string;
 }
 
-// Animated counter component
 const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   end,
   duration = 2000,
@@ -75,7 +77,6 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   );
 };
 
-// Floating particles component
 const FloatingParticles: React.FC = () => {
   const particles = Array.from({ length: 20 }, (_, i) => ({
     id: i,
@@ -87,11 +88,11 @@ const FloatingParticles: React.FC = () => {
   }));
 
   return (
-    <div className="floating-particles">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {particles.map((particle) => (
         <div
           key={particle.id}
-          className="particle"
+          className="absolute bg-white/20 rounded-full animate-bounce"
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,
@@ -111,15 +112,17 @@ interface GlowCardProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-// Glowing card component
 const GlowCard: React.FC<GlowCardProps> = ({
   children,
   className = "",
   ...props
 }) => (
-  <div className={`glow-card ${className}`} {...props}>
-    <div className="glow-effect"></div>
-    <div className="card-content">{children}</div>
+  <div
+    className={`relative group cursor-pointer transition-all duration-500 hover:scale-105 ${className}`}
+    {...props}
+  >
+    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-100 group-hover:blur-xl transition-all duration-200" />
+    <div className="relative bg-white rounded-2xl shadow-2xl">{children}</div>
   </div>
 );
 
@@ -166,67 +169,126 @@ export default function Home() {
     },
   ];
 
+  const getIconColorClasses = (color: string) => {
+    const classes = {
+      blue: "bg-gradient-to-br from-blue-500 to-cyan-500",
+      purple: "bg-gradient-to-br from-purple-500 to-pink-500",
+      green: "bg-gradient-to-br from-green-500 to-emerald-600",
+      orange: "bg-gradient-to-br from-orange-500 to-red-500",
+      indigo: "bg-gradient-to-br from-indigo-500 to-purple-500",
+    };
+    return classes[color as keyof typeof classes] || classes.blue;
+  };
+
+  const getTextColorClasses = (color: string) => {
+    const classes = {
+      blue: "bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent",
+      purple:
+        "bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent",
+      green:
+        "bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent",
+      orange:
+        "bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent",
+    };
+    return classes[color as keyof typeof classes] || classes.blue;
+  };
+
   return (
-    <div className={`main-container ${isVisible ? "visible" : ""}`}>
-      <div className="content-wrapper">
-        {/* Hero Section */}
-        <Section className="hero-section">
-          <div className="hero-gradient">
-            <FloatingParticles />
-            <div className="hero-inner">
-              <div className="hero-content">
-                <div className="hero-badge">
-                  <Star className="star-icon" />
-                  <span>GBBA 3rd Year Work Experience</span>
-                </div>
+    <div
+      className={`min-h-screen relative overflow-hidden transition-all duration-1000 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+      }`}
+    >
+      {/* Background gradients */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100" />
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-green-500/10 rounded-full blur-3xl" />
+      </div>
 
-                <h1 className="hero-title">
-                  <span className="hero-subtitle">Internship</span>
-                  <span className="hero-main-title">Product & AI</span>
-                </h1>
+      {/* Hero Section - Full width, full height */}
+      <section className="relative w-full min-h-screen flex items-center justify-center text-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-700 rounded-b-[5rem]">
+          <FloatingParticles />
+        </div>
 
-                <div className="hero-details">
-                  <p className="hero-date">
-                    <Calendar className="icon" />
-                    <span>July 8, 2025 → August 25, 2025</span>
-                  </p>
-                  <p className="hero-location">
-                    OuiChef Startup • Le Kremlin-Bicêtre, France
-                  </p>
-                </div>
+        <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+          <div className="flex flex-col items-center gap-6 text-white">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-xl px-4 py-2 rounded-full text-sm font-medium">
+              <Star className="w-4 h-4 text-yellow-400" />
+              <span>GBBA 3rd Year Work Experience</span>
+            </div>
 
-                <div className="hero-tutor">
-                  <div className="tutor-info">
-                    <User className="icon" />
-                    <span>Mr. Kamal Bencharki</span>
-                  </div>
-                  <div className="separator">•</div>
-                  <div className="tutor-role">CEO & Founder</div>
-                </div>
+            {/* Main Title */}
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black leading-none">
+              <span className="block text-white/90 text-2xl sm:text-3xl lg:text-4xl font-normal mb-2">
+                Internship
+              </span>
+              <span className="bg-gradient-to-r from-white via-blue-100 to-indigo-100 bg-clip-text text-transparent">
+                Product & AI
+              </span>
+            </h1>
+
+            {/* Date and Location */}
+            <div className="flex flex-col gap-2 text-lg sm:text-xl">
+              <p className="flex items-center justify-center gap-2">
+                <Calendar className="w-5 h-5" />
+                <span>July 8, 2025 → August 25, 2025</span>
+              </p>
+              <p className="text-white/80">
+                OuiChef Startup • Le Kremlin-Bicêtre, France
+              </p>
+            </div>
+
+            {/* Supervisor Info */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl px-4 py-2 rounded-full text-sm">
+                <User className="w-4 h-4" />
+                <span>Mr. Kamal Bencharki</span>
+              </div>
+              <div className="hidden sm:block text-white/60">•</div>
+              <div className="bg-white/10 backdrop-blur-xl px-4 py-2 rounded-full text-sm">
+                CEO & Founder
               </div>
             </div>
           </div>
-        </Section>
+        </div>
+      </section>
+
+      {/* Content sections with proper spacing */}
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 space-y-20 py-20">
         {/* Metrics Section */}
-        <Section title="Key Metrics" className="metrics-section">
-          <div className="metrics-grid">
+        <Section title="Key Metrics">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {keyMetrics.map((metric, index) => (
               <GlowCard
                 key={metric.label}
-                className="metric-card"
+                className="transition-all duration-500"
                 style={{ transitionDelay: `${index * 100}ms` }}
                 onMouseEnter={() => setHoveredCard(`metric-${index}`)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
-                <div className="metric-content">
-                  <div className={`metric-icon ${metric.color}`}>
-                    <metric.icon className="icon" />
+                <div className="p-6 text-center flex flex-col items-center gap-4">
+                  <div
+                    className={`w-12 h-12 rounded-xl ${getIconColorClasses(
+                      metric.color
+                    )} flex items-center justify-center shadow-lg`}
+                  >
+                    <metric.icon className="w-6 h-6 text-white" />
                   </div>
-                  <div className="metric-info">
-                    <div className={`metric-value ${metric.color}`}>
+                  <div className="flex flex-col gap-1">
+                    <div
+                      className={`text-5xl font-bold font-mono ${getTextColorClasses(
+                        metric.color
+                      )}`}
+                    >
                       <AnimatedCounter end={metric.value} />
                     </div>
-                    <p className="metric-label">{metric.label}</p>
+                    <p className="text-sm text-gray-600 font-medium">
+                      {metric.label}
+                    </p>
                   </div>
                 </div>
               </GlowCard>
@@ -235,30 +297,38 @@ export default function Home() {
         </Section>
 
         {/* Highlights Section */}
-        <Section title="Internship Highlights" className="highlights-section">
-          <div className="highlights-grid">
+        <Section title="Internship Highlights">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {highlights.map((highlight, index) => (
               <GlowCard
                 key={highlight.title}
-                className="highlight-card"
+                className="transition-all duration-500"
                 style={{ transitionDelay: `${index * 150}ms` }}
                 onMouseEnter={() => setHoveredCard(`highlight-${index}`)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
-                <div className="highlight-content">
-                  <div className="highlight-header">
-                    <div className={`highlight-icon ${highlight.color}`}>
-                      <highlight.icon className="icon" />
+                <div className="p-8">
+                  <div className="flex items-start gap-4">
+                    <div
+                      className={`w-14 h-14 rounded-xl ${getIconColorClasses(
+                        highlight.color
+                      )} flex items-center justify-center shadow-xl flex-shrink-0`}
+                    >
+                      <highlight.icon className="w-7 h-7 text-white" />
                     </div>
-                    <div className="highlight-text">
-                      <h3 className="highlight-title">{highlight.title}</h3>
-                      <p className="highlight-description">
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        {highlight.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
                         {highlight.description}
                       </p>
                     </div>
                     <ArrowRight
-                      className={`arrow-icon ${
-                        hoveredCard === `highlight-${index}` ? "hovered" : ""
+                      className={`w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5 transition-all duration-300 ${
+                        hoveredCard === `highlight-${index}`
+                          ? "translate-x-1 text-gray-600"
+                          : ""
                       }`}
                     />
                   </div>
@@ -271,58 +341,65 @@ export default function Home() {
         {/* Detailed Information */}
         <Section
           title="Detailed Information"
-          subtitle={"Detailed information about internship"}
-          className="details-section"
+          subtitle="Detailed information about internship"
         >
-          <GlowCard className="details-card">
-            <div className="details-content">
-              <div className="details-grid">
-                <div className="details-column">
-                  <div className="detail-item">
-                    <div className="detail-icon blue">
-                      <Clock className="icon" />
+          <GlowCard className="max-w-5xl mx-auto">
+            <div className="p-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="flex flex-col gap-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <Clock className="w-6 h-6 text-white" />
                     </div>
-                    <div className="detail-info">
-                      <h4 className="detail-title">Duration</h4>
-                      <p className="detail-description">
+                    <div className="flex-1">
+                      <h4 className="text-lg font-bold text-gray-900 mb-1">
+                        Duration
+                      </h4>
+                      <p className="text-gray-600">
                         7 intensive weeks • 35h/week
                       </p>
                     </div>
                   </div>
 
-                  <div className="detail-item">
-                    <div className="detail-icon purple">
-                      <Laptop className="icon" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <Laptop className="w-6 h-6 text-white" />
                     </div>
-                    <div className="detail-info">
-                      <h4 className="detail-title">Work Arrangements</h4>
-                      <p className="detail-description">
+                    <div className="flex-1">
+                      <h4 className="text-lg font-bold text-gray-900 mb-1">
+                        Work Arrangements
+                      </h4>
+                      <p className="text-gray-600">
                         Remote work 1 day/week • Modern flexibility
                       </p>
                     </div>
                   </div>
 
-                  <div className="detail-item">
-                    <div className="detail-icon green">
-                      <Briefcase className="icon" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <Briefcase className="w-6 h-6 text-white" />
                     </div>
-                    <div className="detail-info">
-                      <h4 className="detail-title">Type</h4>
-                      <p className="detail-description">
+                    <div className="flex-1">
+                      <h4 className="text-lg font-bold text-gray-900 mb-1">
+                        Type
+                      </h4>
+                      <p className="text-gray-600">
                         Mandatory professional experience (unpaid)
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="details-column">
-                  <div className="detail-item">
-                    <div className="detail-icon orange">
-                      <MapPin className="icon" />
+                <div className="flex flex-col gap-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-white" />
                     </div>
-                    <div className="detail-info">
-                      <h4 className="detail-title">Location</h4>
-                      <p className="detail-description">
+                    <div className="flex-1">
+                      <h4 className="text-lg font-bold text-gray-900 mb-1">
+                        Location
+                      </h4>
+                      <p className="text-gray-600">
                         80T Av. de Fontainebleau
                         <br />
                         94270 Le Kremlin-Bicêtre, France
@@ -330,13 +407,15 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="detail-item">
-                    <div className="detail-icon indigo">
-                      <User className="icon" />
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg flex-shrink-0">
+                      <User className="w-6 h-6 text-white" />
                     </div>
-                    <div className="detail-info">
-                      <h4 className="detail-title">Supervisor</h4>
-                      <p className="detail-description">
+                    <div className="flex-1">
+                      <h4 className="text-lg font-bold text-gray-900 mb-1">
+                        Supervisor
+                      </h4>
+                      <p className="text-gray-600">
                         Mr. Kamal Bencharki
                         <br />
                         CEO & Founder of OuiChef
@@ -349,625 +428,6 @@ export default function Home() {
           </GlowCard>
         </Section>
       </div>
-
-      <style>{`
-        .main-container {
-          min-height: 100vh;
-          background: linear-gradient(
-            135deg,
-            #f8fafc 0%,
-            #e0f2fe 50%,
-            #e8eaf6 100%
-          );
-          position: relative;
-          overflow: hidden;
-          opacity: 0;
-          transform: translateY(20px);
-          transition: all 1s ease-out;
-        }
-
-        .main-container.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .main-container::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(
-              circle at 50% 50%,
-              rgba(59, 130, 246, 0.1) 0%,
-              transparent 50%
-            ),
-            radial-gradient(
-              circle at 80% 20%,
-              rgba(147, 51, 234, 0.1) 0%,
-              transparent 50%
-            ),
-            radial-gradient(
-              circle at 20% 80%,
-              rgba(16, 185, 129, 0.1) 0%,
-              transparent 50%
-            );
-          pointer-events: none;
-          opacity: 0.3;
-        }
-
-        .content-wrapper {
-          position: relative;
-          z-index: 10;
-    
-      
-          display: flex;
-          flex-direction: column;
-          gap: 5rem;
-        }
-
-        .section {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .section-header {
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-
-        .section-title {
-          font-size: 3rem;
-          font-weight: bold;
-          background: linear-gradient(
-            135deg,
-            #3b82f6 0%,
-            #8b5cf6 50%,
-            #4f46e5 100%
-          );
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin-bottom: 0.5rem;
-        }
-
-        .section-subtitle {
-          font-size: 1.125rem;
-          color: #6b7280;
-          max-width: 48rem;
-          margin: 0 auto;
-        }
-
-        .hero-section {
-          position: relative;
-          width: 100%;
-          min-height: 100vh;
-          transition: all 1s ease-out;
-        }
-
-        .hero-gradient {
-          position: relative;
-          width: 100%;
-          min-height: 100vh;
-          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #4338ca 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          overflow: hidden;
-          border-radius: 0 0 5rem 5rem;
-        }
-        .floating-particles {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          overflow: hidden;
-          pointer-events: none;
-        }
-
-        .particle {
-          position: absolute;
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 50%;
-          animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-
-        .hero-content {
-          position: relative;
-          z-index: 10;
-          text-align: center;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .hero-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          background: rgba(255, 255, 255, 0.2);
-          backdrop-filter: blur(10px);
-          padding: 0.5rem 1rem;
-          border-radius: 9999px;
-          font-size: 0.875rem;
-          font-weight: 500;
-          align-self: center;
-        }
-
-        .star-icon {
-          width: 1rem;
-          height: 1rem;
-          color: #fbbf24;
-        }
-
-        .hero-title {
-          font-size: 5rem;
-          font-weight: 900;
-          line-height: 1;
-        }
-
-        .hero-subtitle {
-          display: block;
-          color: rgba(255, 255, 255, 0.9);
-          font-size: 2rem;
-          font-weight: normal;
-          margin-bottom: 0.5rem;
-        }
-
-        .hero-main-title {
-          background: linear-gradient(
-            135deg,
-            #ffffff 0%,
-            #dbeafe 50%,
-            #e0e7ff 100%
-          );
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        .hero-details {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          font-size: 1.125rem;
-        }
-
-        .hero-date {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-        }
-
-        .hero-location {
-          color: rgba(255, 255, 255, 0.8);
-        }
-
-        .hero-tutor {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.75rem;
-          padding-top: 1rem;
-        }
-
-        .tutor-info {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          background: rgba(255, 255, 255, 0.1);
-          padding: 0.5rem 1rem;
-          border-radius: 9999px;
-          backdrop-filter: blur(10px);
-          font-size: 0.875rem;
-        }
-
-        .separator {
-          color: rgba(255, 255, 255, 0.6);
-        }
-
-        .tutor-role {
-          font-size: 0.875rem;
-          background: rgba(255, 255, 255, 0.1);
-          padding: 0.5rem 1rem;
-          border-radius: 9999px;
-          backdrop-filter: blur(10px);
-        }
-
-        .icon {
-          width: 1.25rem;
-          height: 1.25rem;
-        }
-
-        .glow-card {
-          position: relative;
-          display: block;
-        }
-
-        .glow-effect {
-          position: absolute;
-          top: -2px;
-          left: -2px;
-          right: -2px;
-          bottom: -2px;
-          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-          border-radius: 1rem;
-          filter: blur(8px);
-          opacity: 0.3;
-          transition: all 1s ease;
-        }
-
-        .glow-card:hover .glow-effect {
-          opacity: 1;
-          filter: blur(12px);
-          transition: all 0.2s ease;
-        }
-
-        .card-content {
-          position: relative;
-          background: white;
-          border-radius: 1rem;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-
-        .metrics-section {
-          transition: all 1s ease-out 0.3s;
-        }
-
-        .metrics-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 1.5rem;
-          max-width: 64rem;
-          margin: 0 auto;
-        }
-
-        @media (min-width: 1024px) {
-          .metrics-grid {
-            grid-template-columns: repeat(4, 1fr);
-          }
-        }
-
-        .metric-card {
-          transition: all 0.5s ease;
-          cursor: pointer;
-        }
-
-        .metric-card:hover {
-          transform: scale(1.05);
-        }
-
-        .metric-content {
-          padding: 1.5rem;
-          text-align: center;
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .metric-icon {
-          width: 3rem;
-          height: 3rem;
-          margin: 0 auto;
-          border-radius: 0.75rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        .metric-icon.blue {
-          background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-        }
-
-        .metric-icon.purple {
-          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-        }
-
-        .metric-icon.green {
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-
-        .metric-icon.orange {
-          background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
-        }
-
-        .metric-icon .icon {
-          color: white;
-        }
-
-        .metric-info {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
-
-        .metric-value {
-          font-size: 3rem;
-          font-weight: bold;
-          font-family: system-ui, -apple-system, sans-serif;
-        }
-
-        .metric-value.blue {
-          background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        .metric-value.purple {
-          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        .metric-value.green {
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        .metric-value.orange {
-          background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        .metric-label {
-          font-size: 0.875rem;
-          color: #6b7280;
-          font-weight: 500;
-          margin: 0;
-        }
-
-        .highlights-section {
-          transition: all 1s ease-out 0.5s;
-        }
-
-        .highlights-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 2rem;
-          max-width: 80rem;
-          margin: 0 auto;
-        }
-
-        @media (min-width: 768px) {
-          .highlights-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        .highlight-card {
-          transition: all 0.5s ease;
-          cursor: pointer;
-        }
-
-        .highlight-card:hover {
-          transform: scale(1.05);
-        }
-
-        .highlight-content {
-          padding: 2rem;
-        }
-
-        .highlight-header {
-          display: flex;
-          align-items: flex-start;
-          gap: 1rem;
-        }
-
-        .highlight-icon {
-          width: 3.5rem;
-          height: 3.5rem;
-          border-radius: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-          flex-shrink: 0;
-        }
-
-        .highlight-icon.blue {
-          background: linear-gradient(135deg, #3b82f6 0%, #4338ca 100%);
-        }
-
-        .highlight-icon.purple {
-          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-        }
-
-        .highlight-icon.green {
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-
-        .highlight-icon.orange {
-          background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
-        }
-
-        .highlight-icon.indigo {
-          background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
-        }
-
-        .highlight-icon .icon {
-          width: 1.75rem;
-          height: 1.75rem;
-          color: white;
-        }
-
-        .highlight-text {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
-        .highlight-title {
-          font-size: 1.25rem;
-          font-weight: bold;
-          color: #111827;
-          margin: 0;
-        }
-
-        .highlight-description {
-          color: #6b7280;
-          line-height: 1.6;
-          margin: 0;
-        }
-
-        .arrow-icon {
-          width: 1.25rem;
-          height: 1.25rem;
-          color: #9ca3af;
-          transition: all 0.3s ease;
-          flex-shrink: 0;
-          margin-top: 0.125rem;
-        }
-
-        .arrow-icon.hovered {
-          transform: translateX(4px);
-          color: #6b7280;
-        }
-
-        .details-section {
-          transition: all 1s ease-out 0.7s;
-        }
-
-        .details-card {
-          max-width: 64rem;
-          margin: 0 auto;
-        }
-
-        .details-content {
-          padding: 2.5rem;
-        }
-
-        .details-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 2rem;
-        }
-
-        @media (min-width: 768px) {
-          .details-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        .details-column {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .detail-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 1rem;
-        }
-
-        .detail-icon {
-          width: 3rem;
-          height: 3rem;
-          border-radius: 0.75rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-          flex-shrink: 0;
-        }
-
-        .detail-icon.blue {
-          background: linear-gradient(135deg, #3b82f6 0%, #4338ca 100%);
-        }
-
-        .detail-icon.purple {
-          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-        }
-
-        .detail-icon.green {
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-
-        .detail-icon.orange {
-          background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
-        }
-
-        .detail-icon.indigo {
-          background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
-        }
-
-        .detail-icon .icon {
-          color: white;
-        }
-
-        .detail-info {
-          flex: 1;
-        }
-
-        .detail-title {
-          font-weight: bold;
-          color: #111827;
-          font-size: 1.125rem;
-          margin: 0 0 0.25rem 0;
-        }
-
-        .detail-description {
-          color: #6b7280;
-          margin: 0;
-          line-height: 1.5;
-        }
-
-        @keyframes tilt {
-          0%,
-          50%,
-          100% {
-            transform: rotate(0deg);
-          }
-          25% {
-            transform: rotate(1deg);
-          }
-          75% {
-            transform: rotate(-1deg);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .hero-title {
-            font-size: 3rem;
-          }
-
-          .section-title {
-            font-size: 2rem;
-          }
-
-          .content-wrapper {
-            padding: 2rem 1rem;
-            gap: 3rem;
-          }
-
-          .hero-gradient {
-            padding: 2rem;
-          }
-        }
-      `}</style>
     </div>
   );
 }
