@@ -1,5 +1,5 @@
 # React + TypeScript + Vite
-# déployer : npm run deploy git add . && git commit -m "update" && git push origin main && npm run deploy
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -68,3 +68,4 @@ export default tseslint.config([
   },
 ])
 ```
+### déployer : npm run deploy git add . && git commit -m "update" && git push origin main && npm run deploy
