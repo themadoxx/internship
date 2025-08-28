@@ -137,8 +137,8 @@ export default function Home() {
   const keyMetrics = [
     { label: "Weeks", value: 7, icon: Calendar, color: "blue" },
     { label: "Hours/week", value: 35, icon: Clock, color: "purple" },
-    { label: "Total hours", value: 245, icon: TrendingUp, color: "green" },
-    { label: "Remote days", value: 7, icon: Laptop, color: "orange" },
+    { label: "Total hours", value: 302, icon: TrendingUp, color: "green" },
+    { label: "Remote days", value: 7.2, icon: Laptop, color: "orange" },
   ];
 
   const highlights = [
