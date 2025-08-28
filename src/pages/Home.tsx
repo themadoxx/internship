@@ -209,7 +209,7 @@ export default function Home() {
 
       {/* Hero Section - Full width, full height */}
       <section className="relative w-full h-130 flex items-center justify-center text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-700 rounded-b-[5rem]">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-700">
           <FloatingParticles />
         </div>
 
@@ -299,42 +299,56 @@ export default function Home() {
         {/* Highlights Section */}
         <Section title="Internship Highlights">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {highlights.map((highlight, index) => (
-              <GlowCard
-                key={highlight.title}
-                className="transition-all duration-500"
-                style={{ transitionDelay: `${index * 150}ms` }}
-                onMouseEnter={() => setHoveredCard(`highlight-${index}`)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <div className="p-8">
-                  <div className="flex items-start gap-4">
-                    <div
-                      className={`w-14 h-14 rounded-xl ${getIconColorClasses(
-                        highlight.color
-                      )} flex items-center justify-center shadow-xl flex-shrink-0`}
-                    >
-                      <highlight.icon className="w-7 h-7 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">
-                        {highlight.title}
-                      </h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        {highlight.description}
-                      </p>
-                    </div>
-                    <ArrowRight
-                      className={`w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5 transition-all duration-300 ${
-                        hoveredCard === `highlight-${index}`
-                          ? "translate-x-1 text-gray-600"
-                          : ""
-                      }`}
-                    />
-                  </div>
+            {highlights.map((highlight, index) => {
+              // Add auto-animation effect
+              useEffect(() => {
+          const timer = setInterval(() => {
+            setHoveredCard(`highlight-${index}`);
+            setTimeout(() => {
+              setHoveredCard(null);
+            }, 500);
+          }, 4000 + index * 1000); // 4s initial delay, then 1s interval between each card
+
+          return () => clearInterval(timer);
+              }, []);
+
+              return (
+          <GlowCard
+            key={highlight.title}
+            className="transition-all duration-500"
+            style={{ transitionDelay: `${index * 150}ms` }}
+            onMouseEnter={() => setHoveredCard(`highlight-${index}`)}
+            onMouseLeave={() => setHoveredCard(null)}
+          >
+            <div className="p-8">
+              <div className="flex items-start gap-4">
+                <div
+            className={`w-14 h-14 rounded-xl ${getIconColorClasses(
+              highlight.color
+            )} flex items-center justify-center shadow-xl flex-shrink-0`}
+                >
+            <highlight.icon className="w-7 h-7 text-white" />
                 </div>
-              </GlowCard>
-            ))}
+                <div className="flex-1">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              {highlight.title}
+            </h3>
+            <p className="text-gray-600 leading-relaxed">
+              {highlight.description}
+            </p>
+                </div>
+                <ArrowRight
+            className={`w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5 transition-all duration-300 ${
+              hoveredCard === `highlight-${index}`
+                ? "translate-x-1 text-gray-600"
+                : ""
+            }`}
+                />
+              </div>
+            </div>
+          </GlowCard>
+              );
+            })}
           </div>
         </Section>
 

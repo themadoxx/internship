@@ -83,7 +83,9 @@ const Navbar: React.FC = () => {
   };
 
   const handleGetStarted = (): void => {
-    console.log("View Report clicked");
+
+
+
   };
 
   // Styles
@@ -340,28 +342,30 @@ const Navbar: React.FC = () => {
 
           {/* CTA Button Desktop */}
           <div>
-            <button
-              onClick={handleGetStarted}
+            <NavLink to="/">
+              <button
+              onClick={() => handleNavigation("/")}
               style={ctaButtonStyle}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background =
-                  "linear-gradient(135deg, #2563eb, #7c3aed)";
+                "linear-gradient(135deg, #2563eb, #7c3aed)";
                 e.currentTarget.style.transform =
-                  "translateY(-1px) scale(1.05)";
+                "translateY(-1px) scale(1.05)";
                 e.currentTarget.style.boxShadow =
-                  "0 10px 15px -3px rgba(0, 0, 0, 0.1)";
+                "0 10px 15px -3px rgba(0, 0, 0, 0.1)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background =
-                  "linear-gradient(135deg, #3b82f6, #8b5cf6)";
+                "linear-gradient(135deg, #3b82f6, #8b5cf6)";
                 e.currentTarget.style.transform = "translateY(0) scale(1)";
                 e.currentTarget.style.boxShadow =
-                  "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
+                "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
               }}
-            >
+              >
               <GraduationCap style={{ height: "16px", width: "16px" }} />
               Get Started
-            </button>
+              </button>
+            </NavLink>
           </div>
 
           {/* Mobile menu button */}
@@ -416,26 +420,27 @@ const Navbar: React.FC = () => {
               </NavLink>
             ))}
 
+
             {/* Mobile CTA Button */}
             <div style={mobileCTAContainerStyle}>
-              <button
-                onClick={handleGetStarted}
+                <button
+                onClick={() => handleNavigation("/")}
                 style={mobileCTAStyle}
                 type="button"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background =
-                    "linear-gradient(135deg, #2563eb, #7c3aed)";
+                  "linear-gradient(135deg, #2563eb, #7c3aed)";
                   e.currentTarget.style.transform = "translateY(-1px)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background =
-                    "linear-gradient(135deg, #3b82f6, #8b5cf6)";
+                  "linear-gradient(135deg, #3b82f6, #8b5cf6)";
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
-              >
+                >
                 <GraduationCap style={{ height: "16px", width: "16px" }} />
                 Get Started
-              </button>
+                </button>
             </div>
           </div>
         </div>
